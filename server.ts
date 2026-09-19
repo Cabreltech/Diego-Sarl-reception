@@ -1,9 +1,8 @@
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
-import { fileURLToPath } from "url";
 import bodyParser from "body-parser";
-import makeWASocket, { 
+import baileys, { 
     DisconnectReason, 
     useMultiFileAuthState, 
     fetchLatestBaileysVersion,
@@ -14,8 +13,6 @@ import QRCode from "qrcode";
 import pino from "pino";
 import fs from "fs";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const logger = pino({ level: 'info' });
 
@@ -163,7 +160,10 @@ async function connectToWhatsApp() {
 
     // 4. Create brand new WhatsApp socket instance
     try {
-        sock = makeWASocket({
+        const createSocket = typeof baileys === 'function' 
+            ? baileys 
+            : ((baileys as any)?.default || (baileys as any)?.makeWASocket || makeCacheableSignalKeyStore);
+        sock = (createSocket as any)({
             version,
             logger: pino({ level: 'silent' }),
             auth: {
@@ -283,7 +283,7 @@ process.on('uncaughtException', (err) => {
 
 async function startServer() {
     const app = express();
-    const PORT = 3000;
+    const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
     app.use(bodyParser.json());
 
