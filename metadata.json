@@ -1,0 +1,6 @@
+{
+  "name": "Diego SAS Lead Capture",
+  "description": "A mobile-first lead capture system for Diego SAS with WhatsApp alerts and Google Sheets integration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
