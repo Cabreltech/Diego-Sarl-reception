@@ -8,5 +8,5 @@ coverage/
 .env.local
 .env.*.local
 auth_info_baileys/
-data/
+/data/
 .vercel
